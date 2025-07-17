@@ -1,0 +1,79 @@
+part of '../_screens.dart';
+
+@RoutePage()
+class ScreenOnboard extends StatelessWidget {
+  const ScreenOnboard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/onboard-bg.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                flex: 65,
+                child: Image.asset(
+                  "assets/images/onboard-hero.png",
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Expanded(
+                flex: 35,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/farda.png", height: 0.045.sh),
+                    8.verticalSpace,
+                    TextMedium(
+                      text: "Consume, Right",
+                      style: TextStyle(fontSize: 17.sp),
+                    ),
+                    Spacer(),
+                    _shaderText(text: "Start Here"),
+                    Spacer(),
+                    ButtonPrimary(
+                      text: "Get Started",
+                      onClick: () {
+                        context.pushRoute(RouteLogin());
+                      },
+                    ),
+                    12.verticalSpace,
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _shaderText({required String text}) {
+    return ShaderMask(
+      shaderCallback: (Rect bounds) {
+        return LinearGradient(
+          colors: [Color(0xFF535862), Color(0xFFADAEB1), Color(0xFF717680)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ).createShader(bounds);
+      },
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 32.sp,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
