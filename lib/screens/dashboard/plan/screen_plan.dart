@@ -1,8 +1,8 @@
-part of '../../_screens.dart';
 
-@RoutePage()
-class ScreenPlan extends StatelessWidget {
-  const ScreenPlan({super.key});
+import 'package:flutter/material.dart';
+
+class ScreenPlanHope extends StatelessWidget {
+  const ScreenPlanHope({super.key});
 
   @override
   Widget build(BuildContext context) {

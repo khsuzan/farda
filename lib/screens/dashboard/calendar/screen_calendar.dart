@@ -1,6 +1,8 @@
-part of '../../_screens.dart';
 
-@RoutePage()
+import 'package:farda/components/_components.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 class ScreenCalendar extends StatefulWidget {
   const ScreenCalendar({super.key});
 

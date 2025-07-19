@@ -1,6 +1,10 @@
-part of '../../_screens.dart';
 
-@RoutePage()
+import 'package:farda/components/_components.dart';
+import 'package:farda/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
 class ScreenMoodCheckIn extends StatelessWidget {
   const ScreenMoodCheckIn({super.key});
 

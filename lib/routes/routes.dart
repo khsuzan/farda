@@ -1,31 +1,126 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:farda/routes/routes.gr.dart';
+import 'package:farda/screens/_screens.dart';
+import 'package:farda/screens/connect_onboard/screen_connect_onboard.dart';
+import 'package:farda/screens/dashboard/calendar/screen_calendar.dart';
+import 'package:farda/screens/dashboard/calibration/screen_calibration.dart';
+import 'package:farda/screens/dashboard/dashboard_shell.dart';
+import 'package:farda/screens/dashboard/home/screen_home.dart';
+import 'package:farda/screens/dashboard/mood_check/screen_mood_checkin.dart';
+import 'package:farda/screens/dashboard/more/screen_more.dart';
+import 'package:farda/screens/dashboard/plan/screen_plan.dart';
+import 'package:farda/screens/emoji/screen_emoji.dart';
+import 'package:farda/screens/login/screen_login.dart';
+import 'package:farda/screens/onboard/screen_onboard.dart';
+import 'package:farda/screens/otp_verify/screen_otp_verify.dart';
+import 'package:farda/screens/prescription_info/screen_prescription.dart';
+import 'package:farda/screens/subscription/screen_subscription.dart';
+import 'package:flutter/material.dart';
 
-@AutoRouterConfig()
-class AppRouter extends RootStackRouter {
-  @override
-  List<AutoRoute> get routes => [
-    // RedirectRoute(path: '/', redirectTo: '/dashboard'),
-    AutoRoute(page: RouteOnboard.page, path: '/'),
-    AutoRoute(page: RouteLogin.page),
-    AutoRoute(page: RouteOtpVerify.page),
-    AutoRoute(page: RouteConnectOnboard.page),
-    AutoRoute(page: RouteSubscription.page),
-    AutoRoute(page: RoutePrescription.page),
-    AutoRoute(page: RouteEmoji.page),
-    AutoRoute(
-      page: RouteDashboardShell.page,
-      path: '/dashboard',
-      children: [
-        RedirectRoute(path: '', redirectTo: 'calendar'),
+import 'package:go_router/go_router.dart';
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+class AppRouter {
+  
+   static final router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
+  debugLogDiagnostics: true,
+    initialLocation: CustomRoutePaths.onboard,
+    routes: [
+      GoRoute(
+        path: CustomRoutePaths.dashboard,
+        builder: (context, state) =>     ScreenDashboardShell(),
+      ),
+      GoRoute(
+        path: CustomRoutePaths.login,
+        builder: (context, state) => const ScreenLogin(),
+      ),
+      GoRoute(
+        path: CustomRoutePaths.otpVerify,
+        builder: (context, state) => const ScreenOtpVerify(),
+      ),
+      GoRoute(
+        path: CustomRoutePaths.onboard,
+        builder: (context, state) => const ScreenOnboard(),
+      ),
+       GoRoute(
+        path: CustomRoutePaths.screenConnectOnBoard,
+        builder: (context, state) =>  ScreenConnectOnboard(),
+      ),
+      GoRoute(
+        path: CustomRoutePaths.subscription,
+        builder: (context, state) => const ScreenSubscription(),
+      ),
+      GoRoute(
+        path: CustomRoutePaths.prescription,
+        builder: (context, state) => const ScreenPrescription(),
+      ),
+      GoRoute(
+        path: CustomRoutePaths.emoji,
+        builder: (context, state) => const ScreenEmoji(),
+      ),
+      GoRoute(
+        path: CustomRoutePaths.mood,
+        builder: (context, state) => const ScreenMoodCheckIn(),
+      ),
+      GoRoute(
+        path: CustomRoutePaths.calibration,
+        builder: (context, state) => const ScreenCalibration(),
+      ),
+       
 
-        AutoRoute(page: RouteHome.page, path: 'home'),
-        AutoRoute(page: RoutePlan.page, path: 'plan'),
-        AutoRoute(page: RouteCalendar.page, path: 'calendar'),
-        AutoRoute(page: RouteMore.page, path: 'more'),
-      ],
-    ),
-    AutoRoute(page: RouteMoodCheckIn.page, path: '/mood'),
-    AutoRoute(page: RouteCalibration.page, path: '/calibration'),
-  ];
+      /// Dashboard Shell Route
+      ShellRoute(
+        builder: (context, state, child) {
+          return ScreenDashboardShell(
+            child: state.fullPath == CustomRoutePaths.dashboard ? null : child,
+          );
+        },
+        routes: [
+          GoRoute(
+            path: CustomRoutePaths.home,
+            builder: (context, state) => const ScreenHome(),
+          ),
+          GoRoute(
+            path: CustomRoutePaths.plan,
+            builder: (context, state) => const ScreenPlanHope(),
+          ),
+          GoRoute(
+            path: CustomRoutePaths.calendar,
+            builder: (context, state) => const ScreenCalendar(),
+          ),
+          GoRoute(
+            path: CustomRoutePaths.more,
+            builder: (context, state) => const ScreenMore(),
+          ),
+        ],
+      ),
+    ],
+
+    // redirect: (context, state) {
+    //   if (state.uri.path == CustomRoutePaths.dashboard) {
+    //     return '${CustomRoutePaths.dashboard}';
+    //   }
+    //   return null;
+    // },
+  );
+}
+
+
+
+class CustomRoutePaths {
+  static const String root = '/';
+ static const String   screenConnectOnBoard =  "/screen-connect-onboard"; 
+  static const String onboard = "/onbarod";
+  static const String dashboard = '/dashboard';
+  static const String login = '/login';
+  static const String otpVerify = '/otp-verify';
+  static const String subscription = '/subscription';
+  static const String prescription = '/prescription';
+  static const String emoji = '/emoji';
+  static const String mood = '/mood';
+  static const String calibration = '/calibration';
+
+  // Tabs under dashboard
+  static const String home = 'home';
+  static const String plan = 'plan';
+  static const String calendar = 'calendar';
+  static const String more = 'more';
 }

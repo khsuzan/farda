@@ -1,10 +1,14 @@
 import 'package:farda/di/di.dart';
 import 'package:farda/routes/routes.dart';
+import 'package:farda/screens/dashboard/home/home_provider.dart';
+import 'package:farda/screens/emoji/emoji_provider.dart';
 import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:toastification/toastification.dart';
+import 'package:provider/provider.dart';
+import 'screens/login/login_provider.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -14,12 +18,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late AppRouter _appRouter;
-
   @override
   void initState() {
     super.initState();
-    _appRouter = AppRouter();
   }
 
   @override
@@ -31,10 +32,24 @@ class _MyAppState extends State<MyApp> {
       ensureScreenSize: true,
       builder: (_, child) {
         return ToastificationWrapper(
-          child: MaterialApp.router(
-            // debugShowCheckedModeBanner: false,
-            theme: AppTheme.theme,
-            routerConfig: _appRouter.config(),
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (_) => LoginProvider(),
+              ),
+               ChangeNotifierProvider(
+                create: (_) => EmojiProvider(),
+              ),
+                ChangeNotifierProvider(
+                create: (_) => HomeProvider()..getDoseTimeApi(),
+              ),
+               // Add your providers here
+              // ChangeNotifierProvider(create: (_) => AnotherProvider()),
+            ],
+            child: MaterialApp.router(
+              theme: AppTheme.theme,
+              routerConfig: AppRouter.router,
+            ),
           ),
         );
       },
@@ -56,7 +71,7 @@ void main() async {
     ),
   );
 
-  await injectDependencies();
+  // await injectDependencies();
 
   runApp(const MyApp());
 }

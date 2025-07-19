@@ -1,6 +1,10 @@
-part of '../_screens.dart';
 
-@RoutePage()
+import 'package:farda/components/_components.dart';
+import 'package:farda/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
 class ScreenSubscription extends StatefulWidget {
   const ScreenSubscription({super.key});
 
@@ -127,14 +131,14 @@ class _ScreenSubscriptionState extends State<ScreenSubscription> {
                     ButtonTertiary(
                       text: "Continue for Free",
                       onClick: () {
-                        context.pushRoute(RoutePrescription());
+                        // context.pushRoute(RoutePrescription());
                       },
                     ),
                     12.verticalSpace,
                     ButtonPrimary(
                       text: "Start 1-Month Free Trial",
                       onClick: () {
-                        context.pushRoute(RoutePrescription());
+                        // context.pushRoute(RoutePrescription());
                       },
                     ),
                     8.verticalSpace,

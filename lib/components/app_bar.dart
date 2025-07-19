@@ -51,7 +51,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       customBorder: const CircleBorder(),
                       splashColor: colors.slate.shade200,
                       highlightColor: colors.slate.shade300,
-                      onTap: onBack ?? () => Navigator.of(context).maybePop(),
+                      onTap: onBack ?? () => Navigator.of(context).pop(),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         // adjust touch target size

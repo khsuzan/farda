@@ -1,6 +1,10 @@
-part of '../../_screens.dart';
+import 'package:easy_stepper/easy_stepper.dart';
+import 'package:farda/components/_components.dart';
+import 'package:farda/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
-@RoutePage()
 class ScreenCalibration extends StatelessWidget {
   const ScreenCalibration({super.key});
 
@@ -17,7 +21,12 @@ class ScreenCalibration extends StatelessWidget {
         return Align(
           alignment: Alignment.center,
           child: Dialog(
-            insetPadding: EdgeInsets.only(left: 16.w, top: 16.w, right: 16.w, bottom: kToolbarHeight * 1.5),
+            insetPadding: EdgeInsets.only(
+              left: 16.w,
+              top: 16.w,
+              right: 16.w,
+              bottom: kToolbarHeight * 1.5,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24.r),
             ),

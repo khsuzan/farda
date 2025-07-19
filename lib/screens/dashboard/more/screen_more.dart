@@ -1,6 +1,10 @@
-part of '../../_screens.dart';
 
-@RoutePage()
+import 'package:farda/components/_components.dart';
+import 'package:farda/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
 class ScreenMore extends StatelessWidget {
   const ScreenMore({super.key});
 
@@ -45,7 +49,7 @@ class ScreenMore extends StatelessWidget {
               24.verticalSpace,
               WeekCalendar(
                 onDateSelected: (date) {
-                  context.router.push(RouteEmoji());
+                  // context.router.push(RouteEmoji());
                 },
               ),
               Divider(color: colors.slate.shade100, height: 40.h),

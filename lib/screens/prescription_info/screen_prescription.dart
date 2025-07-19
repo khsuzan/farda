@@ -1,6 +1,11 @@
-part of '../_screens.dart';
 
-@RoutePage()
+import 'package:farda/components/_components.dart';
+import 'package:farda/routes/routes.dart';
+import 'package:farda/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+
 class ScreenPrescription extends StatelessWidget {
   const ScreenPrescription({super.key});
 
@@ -66,7 +71,8 @@ class ScreenPrescription extends StatelessWidget {
               ),
               36.verticalSpace,
               ButtonPrimary(text: "Continue", onClick: () {
-                context.pushRoute(RouteHome());
+                // context.pushRoute(RouteHome());
+                context.go(CustomRoutePaths.emoji);
               }),
               12.verticalSpace,
             ],

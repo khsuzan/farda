@@ -1,7 +1,6 @@
 import 'dart:math' show pi;
 
 import 'package:auto_route/auto_route.dart';
-import 'package:farda/routes/routes.gr.dart';
 import 'package:farda/theme.dart';
 import 'package:farda/utilities/_utilities.dart';
 import 'package:flutter/material.dart';

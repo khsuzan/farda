@@ -1,6 +1,14 @@
-part of '../_screens.dart';
 
-@RoutePage()
+import 'package:farda/application/authentication/repo/authentication_repo.dart';
+import 'package:farda/components/_components.dart';
+import 'package:farda/screens/login/login_provider.dart';
+import 'package:farda/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+
 class ScreenLogin extends StatelessWidget {
   const ScreenLogin({super.key});
 
@@ -9,13 +17,13 @@ class ScreenLogin extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.extension<FardaColors>()!;
     final spacing = theme.extension<Spacing>()!;
-    return BlocPresentationProvider(
-      create: (context) => LoginCubit(),
-      onEvent: (context, event) {
-
-      },
-      child: ExtendedScaffold(
+    final loginProvider = context.watch<LoginProvider>();
+    return 
+      ExtendedScaffold(
         appBar: CustomAppBar(
+          onBack: (){
+           context.go("/");
+          },
           titleType: AppBarTitleType.logo,
           logo: Image.asset(
             "assets/images/farda_large_grey.png",
@@ -49,9 +57,16 @@ class ScreenLogin extends StatelessWidget {
                 20.verticalSpace,
                 ButtonPrimary(
                   text: "Continue",
-                  onClick: () {
+                  onClick: () async{
                     FocusScope.of(context).unfocus();
-                    context.pushRoute(RouteOtpVerify());
+                  
+                    // context.pushRoute(RouteOtpVerify());
+                   
+                    bool response = await loginProvider.sendOtpApi();
+                    if(response == true){
+                        // ignore: use_build_context_synchronously
+                        context.go("/otp-verify");
+                    }
                   },
                 ),
                 16.verticalSpace,
@@ -78,7 +93,9 @@ class ScreenLogin extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      
+    
+    
     );
   }
 }

@@ -1,6 +1,18 @@
-part of '../_screens.dart';
+import 'package:clipboard/clipboard.dart';
+import 'package:farda/components/_components.dart';
+import 'package:farda/components/custom_snackbar.dart';
+import 'package:farda/routes/routes.dart';
+import 'package:farda/screens/login/login_provider.dart';
 
-@RoutePage()
+import 'package:farda/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/otp_field_style.dart';
+import 'package:otp_text_field/style.dart';
+import 'package:provider/provider.dart';
+
 class ScreenOtpVerify extends StatefulWidget {
   const ScreenOtpVerify({super.key});
 
@@ -31,9 +43,14 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
     final theme = Theme.of(context);
     final colors = theme.extension<FardaColors>()!;
     final spacing = theme.extension<Spacing>()!;
+    final loginProvider = context.watch<LoginProvider>();
 
-    void onSubmitPin(String pin) {
-      context.pushRoute(RouteConnectOnboard());
+    void onSubmitPin(String pin) async {
+  
+      bool response = await loginProvider.verifyOtpApi(pin);
+      if (response == true) {
+        context.go(CustomRoutePaths.screenConnectOnBoard);
+      }
     }
 
     return ExtendedScaffold(
@@ -41,6 +58,7 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
       appBar: CustomAppBar(
         titleType: AppBarTitleType.text,
         titleText: "Confirm it's you",
+        onBack: ()=> context.go(CustomRoutePaths.login),
       ),
       body: SafeArea(
         child: Padding(
@@ -116,7 +134,10 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
                           children: [
                             Text(
                               "Paste from clipboard",
-                              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             8.horizontalSpace,
                             Icon(Icons.paste, size: 16.h),
@@ -131,7 +152,19 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
               Row(
                 children: [
                   Expanded(
-                    child: ButtonPrimary(text: "Resend Code", onClick: () {}),
+                    child: ButtonPrimary(
+                      text: "Resend Code",
+                      onClick: () {
+                        loginProvider.sendOtpApi().then((e) {
+                          CustomSnackbar.show(
+                            context,
+                            message: "OTP Verified Successfully!",
+                            backgroundColor: colors.baseBlack,
+                            icon: Icons.check_circle,
+                          );
+                        });
+                      },
+                    ),
                   ),
                   12.horizontalSpace,
                   Expanded(
