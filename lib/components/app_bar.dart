@@ -8,11 +8,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? logo;
   final VoidCallback? onBack;
   final bool isChild;
+  final bool ? isEndIcon;
+  final IconData? iconPath;
+  final   VoidCallback? onIconPress;
 
   const CustomAppBar({
     super.key,
     required this.titleType,
     this.titleText,
+    this.iconPath,
+    this.isEndIcon,
+    this.onIconPress,
     this.logo,
     this.onBack,
     this.isChild = true,
@@ -83,6 +89,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       )
                       : (logo ?? const SizedBox.shrink()),
             ),
+            isEndIcon == true ?  Positioned(
+              right: 0,
+              child:InkWell(
+                onTap: onIconPress,
+                child: Icon(iconPath)))  : SizedBox.shrink(), 
           ],
         ),
       ),

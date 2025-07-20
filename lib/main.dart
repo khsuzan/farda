@@ -2,6 +2,7 @@ import 'package:farda/di/di.dart';
 import 'package:farda/routes/routes.dart';
 import 'package:farda/screens/dashboard/home/home_provider.dart';
 import 'package:farda/screens/emoji/emoji_provider.dart';
+import 'package:farda/screens/prescription_info/prescription_provider.dart';
 import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,6 +43,9 @@ class _MyAppState extends State<MyApp> {
               ),
                 ChangeNotifierProvider(
                 create: (_) => HomeProvider()..getDoseTimeApi(),
+              ),
+               ChangeNotifierProvider(
+                create: (_) => PrescriptionProvider(),
               ),
                // Add your providers here
               // ChangeNotifierProvider(create: (_) => AnotherProvider()),
