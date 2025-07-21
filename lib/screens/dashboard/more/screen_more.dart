@@ -1,9 +1,10 @@
-
 import 'package:farda/components/_components.dart';
+import 'package:farda/screens/prescription_info/prescription_provider.dart';
 import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class ScreenMore extends StatelessWidget {
   const ScreenMore({super.key});
@@ -13,6 +14,7 @@ class ScreenMore extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.extension<FardaColors>()!;
     final spacing = theme.extension<Spacing>()!;
+    final prescriptionProvider = context.watch<PrescriptionProvider>();
     return Scaffold(
       appBar: CustomAppBar(titleType: AppBarTitleType.text, titleText: ""),
       body: SafeArea(
@@ -63,18 +65,84 @@ class ScreenMore extends StatelessWidget {
               12.verticalSpace,
               // prescription view
               PrescriptionView(
-                drName: "Pharmacy or Doctor Name",
-                address: "Address Here",
-                patientName: "Mr. Darren Hopkin",
-                rxNumber: "7654321",
-                storeNumber: "8910",
-                title: "Amoxicillin Capsule 500 mg",
+                drName:
+                    prescriptionProvider
+                        .prescriptionModel
+                        .pharmacyOrDoctorName ??
+                    "Doctor Name",
+                address:
+                    prescriptionProvider.prescriptionModel.address ??
+                    "Address not found",
+                patientName: "Tom Cruse",
+                rxNumber:
+                    prescriptionProvider.prescriptionModel.rxNumber ?? "N/A",
+                storeNumber:
+                    prescriptionProvider.prescriptionModel.storeNumber ?? "N/A",
+                title:
+                    prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames
+                                ?.isNotEmpty ==
+                            true
+                        ? prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames!
+                                .first
+                                .medicineName ??
+                            "Medicine Name"
+                        : "No Medicine",
                 description:
-                    "Take 500mg three times (3x) a day for five (5) days.",
-                quantity: "15",
-                notification: "Refills Remaining upon request",
+                    prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames
+                                ?.isNotEmpty ==
+                            true
+                        ? prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames!
+                                .first
+                                .instructions ??
+                            "No Instructions"
+                        : "No Instructions",
+                quantity:
+                    prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames
+                                ?.isNotEmpty ==
+                            true
+                        ? prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames!
+                                .first
+                                .qty ??
+                            "0"
+                        : "0",
+                notification:
+                    prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames
+                                ?.isNotEmpty ==
+                            true
+                        ? prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames!
+                                .first
+                                .refillsInfo ??
+                            "No Info"
+                        : "No Info",
                 sideEffects:
-                    "May cause nausea, vomiting, and diarrhea. Contact your healthcare provider right away if you experience any serious side effects",
+                    prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames
+                                ?.isNotEmpty ==
+                            true
+                        ? prescriptionProvider
+                                .prescriptionModel
+                                .medicinesNames!
+                                .first
+                                .sideEffects ??
+                            "None"
+                        : "None",
               ),
               20.verticalSpace,
             ],

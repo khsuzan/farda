@@ -1,5 +1,6 @@
 import 'package:farda/di/di.dart';
 import 'package:farda/routes/routes.dart';
+import 'package:farda/screens/dashboard/calendar/calender_provider.dart';
 import 'package:farda/screens/dashboard/home/home_provider.dart';
 import 'package:farda/screens/emoji/emoji_provider.dart';
 import 'package:farda/screens/prescription_info/prescription_provider.dart';
@@ -35,20 +36,14 @@ class _MyAppState extends State<MyApp> {
         return ToastificationWrapper(
           child: MultiProvider(
             providers: [
+              ChangeNotifierProvider(create: (_) => LoginProvider()),
+              ChangeNotifierProvider(create: (_) => EmojiProvider()),
               ChangeNotifierProvider(
-                create: (_) => LoginProvider(),
+                create: (_) => CalenderProvider()..getCallAllApi(),
               ),
-               ChangeNotifierProvider(
-                create: (_) => EmojiProvider(),
-              ),
-                ChangeNotifierProvider(
-                create: (_) => HomeProvider()..getDoseTimeApi(),
-              ),
-               ChangeNotifierProvider(
-                create: (_) => PrescriptionProvider(),
-              ),
-               // Add your providers here
-              // ChangeNotifierProvider(create: (_) => AnotherProvider()),
+              ChangeNotifierProvider(create: (_) => PrescriptionProvider()..getMyPrescriptionApi()),
+              // Add your providers here
+              ChangeNotifierProvider(create: (_) => HomeProvider()),
             ],
             child: MaterialApp.router(
               theme: AppTheme.theme,

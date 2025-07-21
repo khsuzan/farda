@@ -13,7 +13,15 @@ class Country {
     required this.flag,
   });
 }
+String getCurrentDate() {
+  // Get the current date as a DateTime object
+  DateTime now = DateTime.now();
 
+  // Format the date as 'yyyy-MM-dd'
+  String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+
+  return formattedDate;
+}
 final List<Country> _countries = [
   Country(name: 'Afghanistan', code: 'AF', dialCode: '+93', flag: '🇦🇫'),
   Country(name: 'Albania', code: 'AL', dialCode: '+355', flag: '🇦🇱'),
@@ -1498,7 +1506,8 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: event.color.withValues(alpha: 0.1),
+
+                              color: Colors.red,
                               borderRadius: BorderRadius.circular(6),
                               border: Border.all(
                                 color: event.color.withValues(alpha: 0.3),
@@ -1547,6 +1556,8 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                           ),
                         );
                       }),
+                    
+                    
                     ],
                   ),
                 ),

@@ -66,11 +66,9 @@ class PrescriptionProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    final http.Response?  response = await PrecriptionRepo().submitPrescription(prescriptionModel);
+    final int response = await PrecriptionRepo().submitPrescription(prescriptionModel);
 
-    print( response!.statusCode.toString());
-    // If response is a raw HTTP response
-    if ( response!.statusCode == 201) {
+    if ( response == 201) {
       return true;
     }else{
       return false;
@@ -85,4 +83,15 @@ class PrescriptionProvider extends ChangeNotifier {
   }
 }
 
+
+  //get prescription data 
+  Future<void> getMyPrescriptionApi()async{
+      try{
+          final data = await PrecriptionRepo().getPrescription();
+          prescriptionModel = data!;
+          notifyListeners();
+      }catch(e){
+        print(e);
+      }
+  } 
 }

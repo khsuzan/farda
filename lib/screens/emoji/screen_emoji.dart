@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:farda/components/_components.dart';
+import 'package:farda/components/custom_snackbar.dart';
+import 'package:farda/components/note_dialog.dart';
 import 'package:farda/routes/routes.dart';
+import 'package:farda/screens/dashboard/calendar/calender_provider.dart';
 import 'package:farda/screens/emoji/emoji_provider.dart';
 import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,7 @@ class ScreenEmoji extends StatelessWidget {
     final colors = theme.extension<FardaColors>()!;
     final spacing = theme.extension<Spacing>()!;
     final emojiProvider = context.watch<EmojiProvider>();
+    final calenderProvider = context.watch<CalenderProvider>();
     return ExtendedScaffold(
       body: SafeArea(
         child: Padding(
@@ -41,6 +45,9 @@ class ScreenEmoji extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
+                    onTap: (){
+                      context.go(CustomRoutePaths.dashboard);
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         color: colors.slate[100],
@@ -75,7 +82,7 @@ class ScreenEmoji extends StatelessWidget {
                         return Center(
                           child: GestureDetector(
                             onTap: () {
-                              emojiProvider.selecteEmoji(index);
+                              emojiProvider.selecteEmoji(index, item.name);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -117,8 +124,11 @@ class ScreenEmoji extends StatelessWidget {
                     Expanded(
                       child: ButtonPrimary(
                         text: "Set emoji",
-                        onClick: () {
-                          context.go(CustomRoutePaths.dashboard);
+                        onClick: ()async {
+                         String  data = await  calenderProvider.setMoodApi(emojiProvider.selectedName);
+                         CustomSnackbar.show(context, message: data);
+                         showThoughtsDialog(context,calenderProvider );
+                          
                         },
                       ),
                     ),

@@ -26,9 +26,11 @@ class EmojiProvider extends ChangeNotifier {
     // Add more as needed
   ];
   int selected = 0;
+  String selectedName = "";
 
-  selecteEmoji(int index) {
+  selecteEmoji(int index, String name) {
     selected = index;
+    selectedName = name;
     notifyListeners();
   }
 }

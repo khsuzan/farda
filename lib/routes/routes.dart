@@ -14,19 +14,32 @@ import 'package:farda/screens/otp_verify/screen_otp_verify.dart';
 import 'package:farda/screens/prescription_info/screen_prescription.dart';
 import 'package:farda/screens/subscription/screen_subscription.dart';
 import 'package:flutter/material.dart';
-
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+
 class AppRouter {
-  
-   static final router = GoRouter(
+  static Future<String> _getInitialRoute() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? isLoggedIn = prefs.getString('id');
+
+    // Check if the user is logged in or not
+    if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
+      return CustomRoutePaths.dashboard; // Redirect to dashboard if logged in
+    } else {
+      return CustomRoutePaths.login; // Redirect to login if not logged in
+    }
+  }
+
+  static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-  debugLogDiagnostics: true,
-    initialLocation: CustomRoutePaths.onboard,
+    debugLogDiagnostics: true,
+    initialLocation: CustomRoutePaths.dashboard,
     routes: [
       GoRoute(
         path: CustomRoutePaths.dashboard,
-        builder: (context, state) =>     ScreenDashboardShell(),
+        builder: (context, state) => ScreenDashboardShell(),
       ),
       GoRoute(
         path: CustomRoutePaths.login,
@@ -40,9 +53,9 @@ class AppRouter {
         path: CustomRoutePaths.onboard,
         builder: (context, state) => const ScreenOnboard(),
       ),
-       GoRoute(
+      GoRoute(
         path: CustomRoutePaths.screenConnectOnBoard,
-        builder: (context, state) =>  ScreenConnectOnboard(),
+        builder: (context, state) => ScreenConnectOnboard(),
       ),
       GoRoute(
         path: CustomRoutePaths.subscription,
@@ -64,9 +77,7 @@ class AppRouter {
         path: CustomRoutePaths.calibration,
         builder: (context, state) => const ScreenCalibration(),
       ),
-       
-
-      /// Dashboard Shell Route
+      // Dashboard Shell Route
       ShellRoute(
         builder: (context, state, child) {
           return ScreenDashboardShell(
@@ -84,7 +95,7 @@ class AppRouter {
           ),
           GoRoute(
             path: CustomRoutePaths.calendar,
-            builder: (context, state) => const ScreenCalendar(),
+            builder: (context, state) => ScreenCalendar(),
           ),
           GoRoute(
             path: CustomRoutePaths.more,
@@ -93,22 +104,14 @@ class AppRouter {
         ],
       ),
     ],
-
-    // redirect: (context, state) {
-    //   if (state.uri.path == CustomRoutePaths.dashboard) {
-    //     return '${CustomRoutePaths.dashboard}';
-    //   }
-    //   return null;
-    // },
+   
   );
 }
 
-
-
 class CustomRoutePaths {
   static const String root = '/';
- static const String   screenConnectOnBoard =  "/screen-connect-onboard"; 
-  static const String onboard = "/onbarod";
+  static const String screenConnectOnBoard = "/screen-connect-onboard"; 
+  static const String onboard = "/onboard";
   static const String dashboard = '/dashboard';
   static const String login = '/login';
   static const String otpVerify = '/otp-verify';
@@ -117,6 +120,7 @@ class CustomRoutePaths {
   static const String emoji = '/emoji';
   static const String mood = '/mood';
   static const String calibration = '/calibration';
+  static const String dashboardto = '/dashboard/calendar';
 
   // Tabs under dashboard
   static const String home = 'home';

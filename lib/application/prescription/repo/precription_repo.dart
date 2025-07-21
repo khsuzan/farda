@@ -30,7 +30,7 @@ class PrecriptionRepo {
     }
   }
 
-  Future<dynamic> submitPrescription(PrescriptionModel prescription) async {
+  Future<int> submitPrescription(PrescriptionModel prescription) async {
     final preferences = await SharedPreferences.getInstance();
     final token = preferences.getString("access") ?? "";
     
@@ -46,11 +46,37 @@ class PrecriptionRepo {
      debugPrint(response.toString());
 
     if (response != null) {
-      return response;
+      return response.statusCode;
     } else {
       debugPrint(response.toString());
+      return response!.statusCode;
+    }
+  }
+
+
+    Future<PrescriptionModel?> getPrescription() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    try {
+      final response = await ApiService.get(
+        headers: {
+          "Authorization": "Bearer ${preferences.getString("access") ?? ""}",
+        },
+        endpoint: AppUrls.getPrescription,
+      );
+
+      if (response != null) {
+        return PrescriptionModel.fromJson(response);
+      } else {
+        debugPrint("Failed to fetch dose time.");
+        return null;
+      }
+    } catch (e) {
+      debugPrint("getDoseTime error: $e");
       return null;
     }
   }
+
+
 }
 
