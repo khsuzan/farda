@@ -4,6 +4,7 @@ import 'package:farda/app_const/app_text.dart';
 import 'package:farda/components/_components.dart';
 import 'package:farda/components/custom_snackbar.dart';
 import 'package:farda/routes/routes.dart';
+import 'package:farda/screens/dashboard/dashboard_shell.dart';
 import 'package:farda/screens/prescription_info/prescription_provider.dart';
 import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +44,12 @@ class ScreenPrescription extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ),
                       onTap: () async {
-                        await prescriptionProvider.pickImage(
-                          source: ImageSource.gallery,
+                        await prescriptionProvider.pickImages(
+                          
                         );
                          Navigator.pop(context);
                         // Optionally call the API after picking:
-                        await prescriptionProvider.getExtractPrescriptionApi();
+                        await prescriptionProvider.getExtractPrescriptionApi(prescriptionProvider.images);
                         // Handle image
                        
                       },
@@ -60,12 +61,12 @@ class ScreenPrescription extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ),
                       onTap: () async {
-                       await prescriptionProvider.pickImage(
-                          source: ImageSource.camera,
-                        );
+                      //  await prescriptionProvider.pickImages(
+                      //     source: ImageSource.camera,
+                      //   );
                          Navigator.pop(context);
                         // Optionally call the API after picking:
-                        await prescriptionProvider.getExtractPrescriptionApi();
+                        // await prescriptionProvider.getExtractPrescriptionApi();
                         // Handle image
                      
                       },
@@ -140,7 +141,8 @@ class ScreenPrescription extends StatelessWidget {
                print(data);
                if(data == true ){
                 CustomSnackbar.show(context, message: submitPrescription);
-                context.go(CustomRoutePaths.dashboard);
+                // context.go(CustomRoutePaths.dashboard);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenDashboardShell()));
                }else{
                 CustomSnackbar.show(context, message: failedPrescriptionSubmit);
                }

@@ -17,48 +17,49 @@ class PrescriptionProvider extends ChangeNotifier {
   TextEditingController storeNumberController = TextEditingController();
   TextEditingController pillQtyController = TextEditingController();
 
-  File? file;
+  List<File> images = [];
 
   final ImagePicker _picker = ImagePicker();
 
   /// Pick image from gallery or camera
-  Future<void> pickImage({ImageSource source = ImageSource.gallery}) async {
+ Future<void> pickImages() async {
     try {
-      final pickedFile = await _picker.pickImage(source: source);
-      if (pickedFile != null) {
-        file = File(pickedFile.path);
-        notifyListeners(); // Update UI with selected image
+      final pickedFiles = await _picker.pickMultiImage(); // No source parameter needed here
+      if (pickedFiles != null) {
+        // Convert picked files to File objects and add to the images list
+        images = pickedFiles.map((pickedFile) => File(pickedFile.path)).toList();
+        notifyListeners(); // Update UI with selected images
       }
     } catch (e) {
       debugPrint("Image pick error: $e");
     }
   }
-
   /// API call to extract prescription from image
-  Future<void> getExtractPrescriptionApi() async {
-    if (file == null) return;
+Future<void> getExtractPrescriptionApi(List<File> files) async {
+  if (files.isEmpty) return;
 
-    try {
-      isLoading = true;
-      notifyListeners();
+  try {
+    isLoading = true;
+    notifyListeners();
 
-      final data = await PrecriptionRepo().getExtractPrescription(file!);
-      if (data != null) {
-        prescriptionModel = data;
-        prescriptionNumberController.text =
-            prescriptionModel.pharmacyOrDoctorName.toString();
-        storeNumberController.text = prescriptionModel.storeNumber.toString();
-        pillQtyController.text =
-            prescriptionModel.medicinesNames!.first.qty.toString();
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint("getExtractPrescription error: $e");
-    } finally {
-      isLoading = false;
+    // Make the API call
+    final data = await PrecriptionRepo().getExtractPrescription(files);
+    if (data != null) {
+      prescriptionModel = data;
+      prescriptionNumberController.text =
+          prescriptionModel.pharmacyOrDoctorName.toString();
+      storeNumberController.text = prescriptionModel.storeNumber.toString();
+      pillQtyController.text =
+          prescriptionModel.medicinesNames!.first.qty.toString();
       notifyListeners();
     }
+  } catch (e,stack) {
+    debugPrint("getExtractPrescription error: $stack");
+  } finally {
+    isLoading = false;
+    notifyListeners();
   }
+}
 
   //
   Future<bool> submitPrescriptionApi() async {

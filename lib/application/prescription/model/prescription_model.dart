@@ -65,7 +65,7 @@ class MedicinesNames {
   String? medicineName;
   String? genericName;
   String? instructions;
-  String? qty;
+  dynamic? qty;
   String? refillsInfo;
   String? sideEffects;
 

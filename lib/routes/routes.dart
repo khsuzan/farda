@@ -28,14 +28,14 @@ class AppRouter {
     if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
       return CustomRoutePaths.dashboard; // Redirect to dashboard if logged in
     } else {
-      return CustomRoutePaths.login; // Redirect to login if not logged in
+      return CustomRoutePaths.onboard; // Redirect to login if not logged in
     }
   }
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
-    initialLocation: CustomRoutePaths.dashboard,
+
     routes: [
       GoRoute(
         path: CustomRoutePaths.dashboard,
@@ -65,10 +65,10 @@ class AppRouter {
         path: CustomRoutePaths.prescription,
         builder: (context, state) => const ScreenPrescription(),
       ),
-      GoRoute(
-        path: CustomRoutePaths.emoji,
-        builder: (context, state) => const ScreenEmoji(),
-      ),
+      // GoRoute(
+      //   path: CustomRoutePaths.emoji,
+      //   builder: (context, state) => const ScreenEmoji(),
+      // ),
       GoRoute(
         path: CustomRoutePaths.mood,
         builder: (context, state) => const ScreenMoodCheckIn(),
@@ -94,8 +94,14 @@ class AppRouter {
             builder: (context, state) => const ScreenPlanHope(),
           ),
           GoRoute(
-            path: CustomRoutePaths.calendar,
-            builder: (context, state) => ScreenCalendar(),
+            path: '/calendar',
+            builder: (context, state) => const ScreenCalendar(),
+            routes: [
+              GoRoute(
+                path: 'emoji',
+                builder: (context, state) => const ScreenEmoji(),
+              ),
+            ],
           ),
           GoRoute(
             path: CustomRoutePaths.more,
@@ -104,20 +110,39 @@ class AppRouter {
         ],
       ),
     ],
-   
+    redirect: (context, state) async {
+      final initialRoute = await _getInitialRoute();
+
+      // Redirect logic for other routes
+      if (initialRoute == CustomRoutePaths.login) {
+        return CustomRoutePaths
+            .onboard; // Force redirect to login if accessing restricted routes
+      } else if ((state.path == CustomRoutePaths.dashboard)) {
+        return CustomRoutePaths.dashboard;
+      }
+
+      // Prevent redirecting to login if already on the login screen
+      if (state.path == CustomRoutePaths.login &&
+          initialRoute == CustomRoutePaths.login) {
+        return null; // No redirect needed if already on the login screen
+      }
+
+      return initialRoute; // Default redirection (either dashboard or login)
+    },
   );
 }
 
 class CustomRoutePaths {
   static const String root = '/';
-  static const String screenConnectOnBoard = "/screen-connect-onboard"; 
+  static const String screenConnectOnBoard = "/screen-connect-onboard";
   static const String onboard = "/onboard";
   static const String dashboard = '/dashboard';
   static const String login = '/login';
   static const String otpVerify = '/otp-verify';
   static const String subscription = '/subscription';
   static const String prescription = '/prescription';
-  static const String emoji = '/emoji';
+  static const String emoji =
+      '/calendar/emoji'; // Remove the '/' for relative path
   static const String mood = '/mood';
   static const String calibration = '/calibration';
   static const String dashboardto = '/dashboard/calendar';

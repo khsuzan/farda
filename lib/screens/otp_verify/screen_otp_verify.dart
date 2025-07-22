@@ -2,6 +2,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:farda/components/_components.dart';
 import 'package:farda/components/custom_snackbar.dart';
 import 'package:farda/routes/routes.dart';
+import 'package:farda/screens/connect_onboard/screen_connect_onboard.dart';
 import 'package:farda/screens/login/login_provider.dart';
 
 import 'package:farda/theme.dart';
@@ -49,7 +50,8 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
   
       bool response = await loginProvider.verifyOtpApi(pin);
       if (response == true) {
-        context.go(CustomRoutePaths.screenConnectOnBoard);
+        // context.go(CustomRoutePaths.screenConnectOnBoard);
+        Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenConnectOnboard()));
       }
     }
 
@@ -58,7 +60,8 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
       appBar: CustomAppBar(
         titleType: AppBarTitleType.text,
         titleText: "Confirm it's you",
-        onBack: ()=> context.go(CustomRoutePaths.login),
+        // onBack: ()=> context.go(CustomRoutePaths.login),
+        onBack: ()=> Navigator.pop(context),
       ),
       body: SafeArea(
         child: Padding(

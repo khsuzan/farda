@@ -10,18 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PrecriptionRepo {
-  Future<PrescriptionModel?> getExtractPrescription(File file) async {
+  Future<PrescriptionModel?> getExtractPrescription(List<File> file) async {
     final preferences = await SharedPreferences.getInstance();
     final token = preferences.getString("access") ?? "";
 
     final response = await ApiService.postMultipart(
+      files: file,
       endpoint: AppUrls.getExtractPrescriptionOcr,
       fileFieldName:
           "image", // This must match your backend's expected field name
-      file: file,
+      
       headers: {"Authorization": "Bearer $token"},
     );
-
+    print(response);
     if (response != null) {
       return PrescriptionModel.fromJson(response);
     } else {
@@ -54,11 +55,11 @@ class PrecriptionRepo {
   }
 
 
-    Future<PrescriptionModel?> getPrescription() async {
+    Future<dynamic> getPrescription() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     try {
-      final response = await ApiService.get(
+      final response = await ApiService.getList(
         headers: {
           "Authorization": "Bearer ${preferences.getString("access") ?? ""}",
         },
@@ -66,7 +67,7 @@ class PrecriptionRepo {
       );
 
       if (response != null) {
-        return PrescriptionModel.fromJson(response);
+        return response;
       } else {
         debugPrint("Failed to fetch dose time.");
         return null;

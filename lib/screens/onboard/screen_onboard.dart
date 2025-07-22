@@ -1,5 +1,6 @@
 
 import 'package:farda/components/_components.dart';
+import 'package:farda/screens/login/screen_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -46,8 +47,9 @@ class ScreenOnboard extends StatelessWidget {
                     ButtonPrimary(
                       text: "Get Started",
                       onClick: () {
-                        context.go("/login");
-                        // context.pushRoute(RouteLogin());
+                        // context.go("/login");
+                        // context.(RouteLogin());
+                        Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenLogin()));
                       },
                     ),
                     12.verticalSpace,

@@ -6,6 +6,7 @@ import 'package:farda/application/emoji/emoji_model.dart';
 import 'package:farda/components/_components.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CalenderProvider extends ChangeNotifier {
   List<DoseTimeModel> doseTimeModel = [];
@@ -63,10 +64,23 @@ void selectDoes(DoseTimeModel model){
 }
 
 Future<String> setMoodApi(String emoji)async{
+  SharedPreferences preferences = await SharedPreferences.getInstance();
     final data = await CalenderRepo().setMood(getCurrentDate(), emoji);
     if(data['message'] == "Mood created"){
+      moodModel = MoodModel(
+        date: data["date"],
+        emoji: data["emoji"],
+        user: int.parse(preferences.getString("id").toString())
+      );
+      notifyListeners();
       return "Mood Crated Successfully";
     }else if(data["message"] == "Mood updated"){
+       moodModel = MoodModel(
+        date: data["date"],
+        emoji: data["emoji"],
+        user: int.parse(preferences.getString("id").toString())
+      );
+      notifyListeners();
       return "Mood Updated Sucessfully";
     }else{
       return "Something worng, try again";

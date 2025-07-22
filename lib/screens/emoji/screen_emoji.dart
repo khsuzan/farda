@@ -46,7 +46,7 @@ class ScreenEmoji extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: (){
-                      context.go(CustomRoutePaths.dashboard);
+                      Navigator.pop(context);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -116,7 +116,7 @@ class ScreenEmoji extends StatelessWidget {
                       child: ButtonTertiary(
                         text: "Skip",
                         onClick: () {
-                          context.go(CustomRoutePaths.dashboard);
+                          Navigator.pop(context);
                         },
                       ),
                     ),

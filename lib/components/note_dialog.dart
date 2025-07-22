@@ -105,9 +105,9 @@ void showThoughtsDialog(BuildContext context, CalenderProvider data) {
                       Navigator.of(context).pop();
 
                       CustomSnackbar.show(context, message: status);
-                      
+                      Navigator.of(context).pop();
 
-                      context.go(CustomRoutePaths.dashboard);
+                     
                     },
                     child: Text("Save", style: TextStyle(color: Colors.white)),
                   ),

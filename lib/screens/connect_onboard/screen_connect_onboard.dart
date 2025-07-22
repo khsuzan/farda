@@ -1,6 +1,7 @@
 
 import 'package:farda/components/_components.dart';
 import 'package:farda/routes/routes.dart';
+import 'package:farda/screens/prescription_info/screen_prescription.dart';
 import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,7 +41,8 @@ class ScreenConnectOnboard extends StatelessWidget {
                 text: "Setup Vial",
                 onClick: () {
                   // context.pushRoute(RouteSubscription());
-                  context.go(CustomRoutePaths.prescription);
+                  // context.go(CustomRoutePaths.prescription);
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenPrescription()));
                 },
               ),
               8.verticalSpace,

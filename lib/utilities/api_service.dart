@@ -128,10 +128,10 @@ class ApiService {
     }
   }
 
-   static Future<Map<String, dynamic>?> postMultipart({
+ static Future<Map<String, dynamic>?> postMultipart({
     required String endpoint,
     required String fileFieldName,
-    required File file,
+    required List<File> files,
     Map<String, String>? headers,
     Map<String, String>? fields,
   }) async {
@@ -139,25 +139,34 @@ class ApiService {
       final uri = Uri.parse("$appBaseUrl/$endpoint");
       var request = http.MultipartRequest("POST", uri);
 
-      // Headers
+      // Add headers (if any)
       request.headers.addAll(headers ?? {"Content-Type": "multipart/form-data"});
 
-      // Add file
-      request.files.add(await http.MultipartFile.fromPath(fileFieldName, file.path));
+      // Add multiple files (ensure correct field names)
+      for (int i = 0; i < files.length; i++) {
+        // Use the same fileFieldName for all files (i.e., 'image')
+        request.files.add(await http.MultipartFile.fromPath(
+          fileFieldName, 
+          files[i].path
+        ));
+      }
 
       // Add other fields (if any)
       if (fields != null) {
         request.fields.addAll(fields);
       }
 
+      // Send the request
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
 
       debugPrint("Multipart POST $endpoint => ${response.statusCode}: ${response.body}");
 
+      // Check the status code and return response body as JSON
       if (response.statusCode == 200 || response.statusCode == 201) {
         return jsonDecode(response.body);
       } else {
+        debugPrint("Error: ${response.statusCode}");
         return null;
       }
     } catch (e) {
