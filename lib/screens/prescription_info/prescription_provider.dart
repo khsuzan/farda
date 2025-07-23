@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as http;
+import 'package:farda/application/prescription/model/prescription_list_model.dart';
 import 'package:farda/application/prescription/model/prescription_model.dart';
 import 'package:farda/application/prescription/repo/precription_repo.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 
 class PrescriptionProvider extends ChangeNotifier {
   PrescriptionModel prescriptionModel = PrescriptionModel();
+  List<PrescriptionModelList> prescriptionModelList = [];
   bool isLoading = false;
 
   TextEditingController prescriptionNumberController = TextEditingController();
@@ -66,9 +69,7 @@ Future<void> getExtractPrescriptionApi(List<File> files) async {
   try {
     isLoading = true;
     notifyListeners();
-
     final int response = await PrecriptionRepo().submitPrescription(prescriptionModel);
-
     if ( response == 201) {
       return true;
     }else{
@@ -86,13 +87,32 @@ Future<void> getExtractPrescriptionApi(List<File> files) async {
 
 
   //get prescription data 
-  Future<void> getMyPrescriptionApi()async{
-      try{
-          final data = await PrecriptionRepo().getPrescription();
-          prescriptionModel = data!;
-          notifyListeners();
-      }catch(e){
-        print(e);
+Future<void> getMyPrescriptionApi() async {
+  try {
+    // Fetch prescription data from the repository
+    final data = await PrecriptionRepo().getPrescription();
+    
+    // Check if the response is valid and has status code 200
+    if (data != null && data.statusCode == 200) {
+      final List<dynamic> dataList = jsonDecode(data.body);
+
+      // Only process data if it's not empty
+      if (dataList.isNotEmpty) {
+        // Map the data to PrescriptionModel objects
+        prescriptionModelList = dataList
+            .map((item) => PrescriptionModelList.fromJson(item))
+            .toList();
+        notifyListeners(); // Notify listeners if the list has changed
+        debugPrint(prescriptionModelList.first.medicines?.first.qty.toString());  // Log the list for debugging
       }
-  } 
+    } else {
+      // Handle non-200 status codes (if necessary)
+      debugPrint("Failed to fetch data: ${data?.statusCode}");
+    }
+    
+  } catch (e) {
+    // Handle any error that occurs during the API call or data processing
+    debugPrint("Error fetching prescription data: $e");
+  }
+}
 }

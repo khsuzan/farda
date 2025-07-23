@@ -8,6 +8,7 @@ import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 import 'package:provider/provider.dart';
 import 'screens/login/login_provider.dart';
@@ -20,11 +21,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -46,6 +43,7 @@ class _MyAppState extends State<MyApp> {
               ChangeNotifierProvider(create: (_) => HomeProvider()),
             ],
             child: MaterialApp.router(
+
               theme: AppTheme.theme,
               routerConfig: AppRouter.router,
             ),

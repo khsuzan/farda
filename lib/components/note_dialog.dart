@@ -1,14 +1,12 @@
 import 'package:farda/components/custom_snackbar.dart';
-import 'package:farda/routes/routes.dart';
 import 'package:farda/screens/dashboard/calendar/calender_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 void showThoughtsDialog(BuildContext context, CalenderProvider data) {
-  TextEditingController _notesController =
+  TextEditingController notesController =
       TextEditingController(); // Controller for Notes TextField
- 
+
   showDialog(
     context: context,
     builder:
@@ -53,7 +51,7 @@ void showThoughtsDialog(BuildContext context, CalenderProvider data) {
                 // SizedBox(height: 8),
                 TextField(
                   controller:
-                      _notesController, // Connect the controller to the TextField
+                      notesController, // Connect the controller to the TextField
                   maxLines: 5, // Set a maximum number of lines
                   decoration: InputDecoration(
                     hintText: 'Notes',
@@ -94,20 +92,19 @@ void showThoughtsDialog(BuildContext context, CalenderProvider data) {
                     onPressed: () async {
                       // Logic for saving the notes can be placed here
                       String notes =
-                          _notesController.text; // Get the entered notes
-                      print('Saved Notes: $notes');
+                          notesController.text; // Get the entered notes
+                      print(
+                        'Saved Notes: ${data.selectedDoseModel.id.toString()},',
+                      );
 
                       String status = await data.setNotesApi(
                         data.selectedDoseModel.id.toString(),
                         notes,
                       );
-                      
-                      Navigator.of(context).pop();
 
+                      Navigator.of(context).pop();
                       CustomSnackbar.show(context, message: status);
-                      Navigator.of(context).pop();
-
-                     
+                      context.pop();
                     },
                     child: Text("Save", style: TextStyle(color: Colors.white)),
                   ),

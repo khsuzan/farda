@@ -6,9 +6,9 @@ class ThoughtDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+    // final textTheme = theme.textTheme;
     final colors = theme.extension<FardaColors>()!;
-    final spacing = theme.extension<Spacing>()!;
+    // final spacing = theme.extension<Spacing>()!;
     return Dialog(
       insetPadding: const EdgeInsets.all(24),
       backgroundColor: colors.baseWhite,

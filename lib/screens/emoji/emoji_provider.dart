@@ -33,4 +33,16 @@ class EmojiProvider extends ChangeNotifier {
     selectedName = name;
     notifyListeners();
   }
+
+int getEmojiIndex(String emojiName) {
+  try {
+    // Use firstWhere to find the emoji matching the emojiName
+    return feelings.indexWhere((e) => e.name == emojiName);
+  } catch (e) {
+    // Return -1 or handle the error if no match is found
+    return -1;
+  }
+}
+
+
 }

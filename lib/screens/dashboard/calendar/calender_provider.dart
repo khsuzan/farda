@@ -41,6 +41,7 @@ class CalenderProvider extends ChangeNotifier {
 
         if (data.isNotEmpty) {
           moodModel = MoodModel.fromJson(data);
+          
           notifyListeners();
           debugPrint(doseTimeModel.toString());
         }

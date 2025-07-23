@@ -1,13 +1,1 @@
-
-
-import 'package:dio/dio.dart';
-import 'package:farda/app_const/app_urls.dart';
-import 'package:farda/utilities/api_service.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-class HomeRepo {
-  
-
-
-}
+class HomeRepo {}

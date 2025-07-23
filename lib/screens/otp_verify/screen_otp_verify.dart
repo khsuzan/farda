@@ -50,6 +50,7 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
   
       bool response = await loginProvider.verifyOtpApi(pin);
       if (response == true) {
+        CustomSnackbar.show(context, message: "Otp verified sucessfully.");
         // context.go(CustomRoutePaths.screenConnectOnBoard);
         Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenConnectOnboard()));
       }

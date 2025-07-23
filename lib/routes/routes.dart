@@ -20,22 +20,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppRouter {
-  static Future<String> _getInitialRoute() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? isLoggedIn = prefs.getString('id');
-
-    // Check if the user is logged in or not
-    if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
-      return CustomRoutePaths.dashboard; // Redirect to dashboard if logged in
-    } else {
-      return CustomRoutePaths.onboard; // Redirect to login if not logged in
-    }
-  }
+ 
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
-
+    initialLocation: CustomRoutePaths.onboard,
     routes: [
       GoRoute(
         path: CustomRoutePaths.dashboard,
@@ -110,25 +100,25 @@ class AppRouter {
         ],
       ),
     ],
-    redirect: (context, state) async {
-      final initialRoute = await _getInitialRoute();
+    // redirect: (context, state) async {
+    //   final initialRoute = await _getInitialRoute();
 
-      // Redirect logic for other routes
-      if (initialRoute == CustomRoutePaths.login) {
-        return CustomRoutePaths
-            .onboard; // Force redirect to login if accessing restricted routes
-      } else if ((state.path == CustomRoutePaths.dashboard)) {
-        return CustomRoutePaths.dashboard;
-      }
+    //   // Redirect logic for other routes
+    //   if (initialRoute == CustomRoutePaths.login) {
+    //     return CustomRoutePaths
+    //         .onboard; // Force redirect to login if accessing restricted routes
+    //   } else if ((state.path == CustomRoutePaths.dashboard)) {
+    //     return CustomRoutePaths.dashboard;
+    //   }
 
-      // Prevent redirecting to login if already on the login screen
-      if (state.path == CustomRoutePaths.login &&
-          initialRoute == CustomRoutePaths.login) {
-        return null; // No redirect needed if already on the login screen
-      }
+    //   // Prevent redirecting to login if already on the login screen
+    //   if (state.path == CustomRoutePaths.login &&
+    //       initialRoute == CustomRoutePaths.login) {
+    //     return null; // No redirect needed if already on the login screen
+    //   }
 
-      return initialRoute; // Default redirection (either dashboard or login)
-    },
+    //   return initialRoute; // Default redirection (either dashboard or login)
+    // },
   );
 }
 

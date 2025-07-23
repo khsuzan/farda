@@ -320,9 +320,7 @@ class _ScreenCalendarState extends State<ScreenCalendar> {
                 children: [
                   InkWell(
                         onTap: (){
-                          print("data tap");
-                     
-                          // context.go(CustomRoutePaths.emoji);
+                      
                         },
                         child: buildDoseCard(doseList[index], time.format(context))),
 
@@ -357,9 +355,9 @@ class _ScreenCalendarState extends State<ScreenCalendar> {
                       data.selectDoes(doseList[index]);
                  
 
-                      // context.go(CustomRoutePaths.emoji);
+                      context.go(CustomRoutePaths.emoji);
                      
-                     Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenEmoji()));
+                    //  Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenEmoji())); 
 
                     },
                     child: buildDoseCard(doseList[index], time.format(context))) // Display DoseCard

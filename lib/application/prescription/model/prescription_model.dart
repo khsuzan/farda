@@ -26,9 +26,9 @@ class PrescriptionModel {
     address = json['address'];
     rxNumber = json['rx_number'];
     storeNumber = json['store_number'];
-    if (json['medicines_names'] != null) {
+    if (json['medicines'] != null) {
       medicinesNames = <MedicinesNames>[];
-      json['medicines_names'].forEach((v) {
+      json['medicines'].forEach((v) {
         medicinesNames!.add(new MedicinesNames.fromJson(v));
       });
     }
@@ -44,7 +44,7 @@ class PrescriptionModel {
     data['rx_number'] = this.rxNumber;
     data['store_number'] = this.storeNumber;
     if (this.medicinesNames != null) {
-      data['medicines_names'] =
+      data['medicines'] =
           this.medicinesNames!.map((v) => v.toJson()).toList();
     }
     return data;
@@ -57,7 +57,7 @@ class PrescriptionModel {
   "address": address,
   "rx_number": rxNumber,
   "store_number": storeNumber,
-  "medicines_names": medicinesNames!.map((m) => m.toMedicineName()).toList(),
+  "medicines": medicinesNames!.map((m) => m.toMedicineName()).toList(),
 };
 }
 
@@ -65,7 +65,7 @@ class MedicinesNames {
   String? medicineName;
   String? genericName;
   String? instructions;
-  dynamic? qty;
+  dynamic qty;
   String? refillsInfo;
   String? sideEffects;
 

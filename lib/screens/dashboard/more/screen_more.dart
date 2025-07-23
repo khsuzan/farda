@@ -16,7 +16,7 @@ class ScreenMore extends StatelessWidget {
     final spacing = theme.extension<Spacing>()!;
     final prescriptionProvider = context.watch<PrescriptionProvider>();
     return Scaffold(
-      appBar: CustomAppBar(titleType: AppBarTitleType.text, titleText: ""),
+      // appBar: CustomAppBar(titleType: AppBarTitleType.text, titleText: ""),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: spacing.horizontalDefault,
@@ -64,86 +64,124 @@ class ScreenMore extends StatelessWidget {
               ),
               12.verticalSpace,
               // prescription view
-              PrescriptionView(
-                drName:
-                    prescriptionProvider
-                        .prescriptionModel
-                        .pharmacyOrDoctorName ??
-                    "Doctor Name",
-                address:
-                    prescriptionProvider.prescriptionModel.address ??
-                    "Address not found",
-                patientName: "Tom Cruse",
-                rxNumber:
-                    prescriptionProvider.prescriptionModel.rxNumber ?? "N/A",
-                storeNumber:
-                    prescriptionProvider.prescriptionModel.storeNumber ?? "N/A",
-                title:
-                    prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames
-                                ?.isNotEmpty ==
-                            true
-                        ? prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames!
-                                .first
-                                .medicineName ??
-                            "Medicine Name"
-                        : "No Medicine",
-                description:
-                    prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames
-                                ?.isNotEmpty ==
-                            true
-                        ? prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames!
-                                .first
-                                .instructions ??
-                            "No Instructions"
-                        : "No Instructions",
-                quantity:
-                    prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames
-                                ?.isNotEmpty ==
-                            true
-                        ? prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames!
-                                .first
-                                .qty ??
-                            "0"
-                        : "0",
-                notification:
-                    prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames
-                                ?.isNotEmpty ==
-                            true
-                        ? prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames!
-                                .first
-                                .refillsInfo ??
-                            "No Info"
-                        : "No Info",
-                sideEffects:
-                    prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames
-                                ?.isNotEmpty ==
-                            true
-                        ? prescriptionProvider
-                                .prescriptionModel
-                                .medicinesNames!
-                                .first
-                                .sideEffects ??
-                            "None"
-                        : "None",
-              ),
+              prescriptionProvider.prescriptionModelList.isEmpty
+                  ? PrescriptionView(
+                    drName: "Doctor Name",
+                    address: "Address not found",
+                    patientName: "Tom Cruse",
+                    rxNumber: "N/A",
+                    storeNumber: "N/A",
+                    title: "Medicine Name",
+
+                    description: "No Instructions",
+
+                    quantity: "0",
+
+                    notification: "No Info",
+                    sideEffects: "None",
+                  )
+                  : PrescriptionView(
+                    drName:
+                        prescriptionProvider
+                            .prescriptionModelList
+                            .first
+                            .pharmacyOrDoctorName ??
+                        "Doctor Name",
+                    address:
+                        prescriptionProvider
+                            .prescriptionModelList
+                            .first
+                            .address ??
+                        "Address not found",
+                    patientName: "Tom Cruse",
+                    rxNumber:
+                        prescriptionProvider
+                            .prescriptionModelList
+                            .first
+                            .rxNumber ??
+                        "N/A",
+                    storeNumber:
+                        prescriptionProvider
+                            .prescriptionModelList
+                            .first
+                            .storeNumber ??
+                        "N/A",
+                    title:
+                        prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines
+                                    ?.isNotEmpty ==
+                                true
+                            ? prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines!
+                                    .first
+                                    .medicineName ??
+                                "Medicine Name"
+                            : "No Medicine",
+                    description:
+                        prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines
+                                    ?.isNotEmpty ==
+                                true
+                            ? prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines!
+                                    .first
+                                    .instructions ??
+                                "No Instructions"
+                            : "No Instructions",
+                    quantity:
+                        prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines
+                                    ?.isNotEmpty ==
+                                true
+                            ? prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines!
+                                    .first
+                                    .qty ??
+                                "0"
+                            : "0",
+                    notification:
+                        prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines
+                                    ?.isNotEmpty ==
+                                true
+                            ? prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines!
+                                    .first
+                                    .refillsInfo ??
+                                "No Info"
+                            : "No Info",
+                    sideEffects:
+                        prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines
+                                    ?.isNotEmpty ==
+                                true
+                            ? prescriptionProvider
+                                    .prescriptionModelList
+                                    .first
+                                    .medicines!
+                                    .first
+                                    .sideEffects ??
+                                "None"
+                            : "None",
+                  ),
               20.verticalSpace,
             ],
           ),
