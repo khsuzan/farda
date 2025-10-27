@@ -47,12 +47,15 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
     final loginProvider = context.watch<LoginProvider>();
 
     void onSubmitPin(String pin) async {
-  
-      bool response = await loginProvider.verifyOtpApi(pin);
+      //TODO: true for bypass
+      bool response = true ?? await loginProvider.verifyOtpApi(pin);
       if (response == true) {
         CustomSnackbar.show(context, message: "Otp verified sucessfully.");
         // context.go(CustomRoutePaths.screenConnectOnBoard);
-        Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenConnectOnboard()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => ScreenConnectOnboard()),
+        );
       }
     }
 
@@ -62,7 +65,7 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
         titleType: AppBarTitleType.text,
         titleText: "Confirm it's you",
         // onBack: ()=> context.go(CustomRoutePaths.login),
-        onBack: ()=> Navigator.pop(context),
+        onBack: () => Navigator.pop(context),
       ),
       body: SafeArea(
         child: Padding(
@@ -158,15 +161,16 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
                   Expanded(
                     child: ButtonPrimary(
                       text: "Resend Code",
-                      onClick: () {
-                        loginProvider.sendOtpApi().then((e) {
+                      onClick: () async {
+                        //TODO: true for bypass
+                        bool response =
+                            true ?? await loginProvider.sendOtpApi();
+                        if (response == true) {
                           CustomSnackbar.show(
                             context,
-                            message: "OTP Verified Successfully!",
-                            backgroundColor: colors.baseBlack,
-                            icon: Icons.check_circle,
+                            message: "Your OTP has been resent to your phone.",
                           );
-                        });
+                        }
                       },
                     ),
                   ),

@@ -1,4 +1,3 @@
-
 import 'package:farda/application/authentication/repo/authentication_repo.dart';
 import 'package:farda/components/_components.dart';
 import 'package:farda/components/custom_snackbar.dart';
@@ -20,86 +19,88 @@ class ScreenLogin extends StatelessWidget {
     final colors = theme.extension<FardaColors>()!;
     final spacing = theme.extension<Spacing>()!;
     final loginProvider = context.watch<LoginProvider>();
-    return 
-      ExtendedScaffold(
-        appBar: CustomAppBar(
-          onBack: (){
-           context.go("/");
-          },
-          titleType: AppBarTitleType.logo,
-          logo: Image.asset(
-            "assets/images/farda_large_grey.png",
-            height: 0.03.sh,
+    return ExtendedScaffold(
+      appBar: CustomAppBar(
+        onBack: () {
+          context.go("/");
+        },
+        titleType: AppBarTitleType.logo,
+        logo: Image.asset(
+          "assets/images/farda_large_grey.png",
+          height: 0.03.sh,
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: spacing.horizontalDefault,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              12.verticalSpace,
+              Text(
+                "Enter your mobile number",
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colors.baseBlack,
+                  fontSize: 15.sp,
+                ),
+              ),
+              6.verticalSpace,
+              PhoneNumberInput(
+                onPhoneNumberChanged: (phoneNumber) {
+                  // Handle phone number changes
+                },
+                onCountryChanged: (country) {
+                  // Handle country selection changes
+                },
+                hintText: 'Mobile number',
+              ),
+              20.verticalSpace,
+              ButtonPrimary(
+                text: "Continue",
+                onClick: () async {
+                  FocusScope.of(context).unfocus();
+
+                  // context.pushRoute(RouteOtpVerify());
+                  //TODO: true for bypass
+                  bool response = true ?? await loginProvider.sendOtpApi();
+                  if (response == true) {
+                    // ignore: use_build_context_synchronously
+                    // context.go("/otp-verify");
+                    CustomSnackbar.show(
+                      context,
+                      message: "Your OTP has been sent to your phone.",
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => ScreenOtpVerify()),
+                    );
+                  }
+                },
+              ),
+              16.verticalSpace,
+              DividerTextHorizontal(text: "or"),
+              16.verticalSpace,
+              ButtonSecondary(
+                prefixIcon: SvgPicture.asset("assets/icons/apple.svg"),
+                text: "Continue With Apple",
+                onClick: () {},
+              ),
+              12.verticalSpace,
+              ButtonSecondary(
+                prefixIcon: SvgPicture.asset("assets/icons/facebook.svg"),
+                text: "Continue With Facebook",
+                onClick: () {},
+              ),
+              12.verticalSpace,
+              ButtonSecondary(
+                prefixIcon: SvgPicture.asset("assets/icons/google.svg"),
+                text: "Continue With Google",
+                onClick: () {},
+              ),
+            ],
           ),
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: spacing.horizontalDefault,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                12.verticalSpace,
-                Text(
-                  "Enter your mobile number",
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colors.baseBlack,
-                    fontSize: 15.sp,
-                  ),
-                ),
-                6.verticalSpace,
-                PhoneNumberInput(
-                  onPhoneNumberChanged: (phoneNumber) {
-                    // Handle phone number changes
-                  },
-                  onCountryChanged: (country) {
-                    // Handle country selection changes
-                  },
-                  hintText: 'Mobile number',
-                ),
-                20.verticalSpace,
-                ButtonPrimary(
-                  text: "Continue",
-                  onClick: () async{
-                    FocusScope.of(context).unfocus();
-                  
-                    // context.pushRoute(RouteOtpVerify());
-                   
-                    bool response = await loginProvider.sendOtpApi();
-                    if(response == true){
-                        // ignore: use_build_context_synchronously
-                        // context.go("/otp-verify");
-                        CustomSnackbar.show(context, message: "Your OTP has been sent to your phone.");
-                        Navigator.push(context, MaterialPageRoute(builder: (_)=> ScreenOtpVerify()));
-                    }
-                  },
-                ),
-                16.verticalSpace,
-                DividerTextHorizontal(text: "or"),
-                16.verticalSpace,
-                ButtonSecondary(
-                  prefixIcon: SvgPicture.asset("assets/icons/apple.svg"),
-                  text: "Continue With Apple",
-                  onClick: () {},
-                ),
-                12.verticalSpace,
-                ButtonSecondary(
-                  prefixIcon: SvgPicture.asset("assets/icons/facebook.svg"),
-                  text: "Continue With Facebook",
-                  onClick: () {},
-                ),
-                12.verticalSpace,
-                ButtonSecondary(
-                  prefixIcon: SvgPicture.asset("assets/icons/google.svg"),
-                  text: "Continue With Google",
-                  onClick: () {},
-                ),
-              ],
-            ),
-          ),
-        ),
-      
-    
-    
+      ),
     );
   }
 }
