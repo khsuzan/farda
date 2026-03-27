@@ -1,5 +1,5 @@
 import 'package:farda/screens/_screens.dart';
-import 'package:farda/screens/connect_onboard/screen_connect_onboard.dart';
+import 'package:farda/screens/connect_onboard/screen_setup_vial.dart';
 import 'package:farda/screens/dashboard/calendar/screen_calendar.dart';
 import 'package:farda/screens/dashboard/calibration/screen_calibration.dart';
 import 'package:farda/screens/dashboard/dashboard_shell.dart';
@@ -15,7 +15,6 @@ import 'package:farda/screens/prescription_info/screen_prescription.dart';
 import 'package:farda/screens/subscription/screen_subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 

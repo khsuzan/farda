@@ -1,9 +1,11 @@
 import 'package:farda/components/_components.dart';
 import 'package:farda/screens/prescription_info/prescription_provider.dart';
 import 'package:farda/theme.dart';
+import 'package:farda/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ScreenMore extends StatelessWidget {
@@ -55,17 +57,41 @@ class ScreenMore extends StatelessWidget {
                 },
               ),
               Divider(color: colors.slate.shade100, height: 40.h),
-              //  Progress Section
-              PillProgressSection(
-                remainingValue: "480",
-                consumedValue: 740,
-                consumedMax: 1000,
-                targetValue: "1220",
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Prescription",
+                    style: theme.textTheme.titleMedium?.merge(
+                      TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      context.push(CustomRoutePaths.prescription);
+                    },
+                    icon: Icon(
+                      prescriptionProvider.prescriptionModelList.isEmpty
+                          ? Icons.add
+                          : Icons.edit,
+                      color: theme.primaryColor,
+                    ),
+                    label: Text(
+                      prescriptionProvider.prescriptionModelList.isEmpty
+                          ? "Add"
+                          : "Update",
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
+                  ),
+                ],
               ),
               12.verticalSpace,
               // prescription view
               prescriptionProvider.prescriptionModelList.isEmpty
                   ? PrescriptionView(
+                    onSetupVial:
+                        () =>
+                            context.push(CustomRoutePaths.screenConnectOnBoard),
                     drName: "Doctor Name",
                     address: "Address not found",
                     patientName: "Tom Cruse",
@@ -81,6 +107,9 @@ class ScreenMore extends StatelessWidget {
                     sideEffects: "None",
                   )
                   : PrescriptionView(
+                    onSetupVial:
+                        () =>
+                            context.push(CustomRoutePaths.screenConnectOnBoard),
                     drName:
                         prescriptionProvider
                             .prescriptionModelList

@@ -1,5 +1,4 @@
 import 'package:farda/components/_components.dart';
-import 'package:farda/routes/routes.dart';
 import 'package:farda/screens/dashboard/calendar/screen_calendar.dart';
 import 'package:farda/screens/dashboard/home/screen_home.dart';
 import 'package:farda/screens/dashboard/more/screen_more.dart';
@@ -8,8 +7,8 @@ import 'package:flutter/material.dart';
 
 
 class ScreenDashboardShell extends StatefulWidget {
-  Widget? child;
-  ScreenDashboardShell({super.key, this.child});
+  final Widget? child;
+  const ScreenDashboardShell({super.key, this.child});
 
   @override
   State<ScreenDashboardShell> createState() => _ScreenDashboardShellState();

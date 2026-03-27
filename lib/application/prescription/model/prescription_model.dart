@@ -6,6 +6,7 @@ class PrescriptionModel {
   String? address;
   String? rxNumber;
   String? storeNumber;
+  String? deviceId;
   List<MedicinesNames>? medicinesNames;
 
   PrescriptionModel(
@@ -16,6 +17,7 @@ class PrescriptionModel {
       this.address,
       this.rxNumber,
       this.storeNumber,
+      this.deviceId,
       this.medicinesNames});
 
   PrescriptionModel.fromJson(Map<String, dynamic> json) {
@@ -26,39 +28,48 @@ class PrescriptionModel {
     address = json['address'];
     rxNumber = json['rx_number'];
     storeNumber = json['store_number'];
-    if (json['medicines'] != null) {
+    deviceId = json['deviceId'];
+    
+    // Check both 'medicines' and 'medicines_names' keys for compatibility
+    final medicinesList = json['medicines'] ?? json['medicines_names'];
+    if (medicinesList != null) {
       medicinesNames = <MedicinesNames>[];
-      json['medicines'].forEach((v) {
+      medicinesList.forEach((v) {
         medicinesNames!.add(new MedicinesNames.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['pharmacy_or_doctor_name'] = this.pharmacyOrDoctorName;
-    data['contact_details'] = this.contactDetails;
-    data['date_filled'] = this.dateFilled;
-    data['date_expired'] = this.dateExpired;
-    data['address'] = this.address;
-    data['rx_number'] = this.rxNumber;
-    data['store_number'] = this.storeNumber;
-    if (this.medicinesNames != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['pharmacy_or_doctor_name'] = pharmacyOrDoctorName;
+    data['contact_details'] = contactDetails;
+    data['date_filled'] = dateFilled;
+    data['date_expired'] = dateExpired;
+    data['address'] = address;
+    data['rx_number'] = rxNumber;
+    data['store_number'] = storeNumber;
+    data['deviceId'] = deviceId;
+    if (medicinesNames != null) {
       data['medicines'] =
-          this.medicinesNames!.map((v) => v.toJson()).toList();
+          medicinesNames!.map((v) => v.toJson()).toList();
     }
     return data;
   }
-  Map<String, dynamic> toSubmit() => {
-  "pharmacy_or_doctor_name": pharmacyOrDoctorName,
-  "contact_details": contactDetails,
-  "date_filled": dateFilled,
-  "date_expired": dateExpired,
-  "address": address,
-  "rx_number": rxNumber,
-  "store_number": storeNumber,
-  "medicines": medicinesNames!.map((m) => m.toMedicineName()).toList(),
-};
+  Map<String, dynamic> toSubmit(String userId) {
+    return {
+      "userId": userId,
+      "pharmacy_or_doctor_name": pharmacyOrDoctorName,
+      "contact_details": contactDetails,
+      "date_filled": dateFilled,
+      "date_expired": dateExpired,
+      "address": address,
+      "rx_number": rxNumber,
+      "store_number": storeNumber,
+      "deviceId": deviceId,
+      "medicines_names": medicinesNames?.map((m) => m.toMedicineName()).toList() ?? [],
+    };
+  }
 }
 
 class MedicinesNames {
@@ -87,13 +98,13 @@ class MedicinesNames {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['medicine_name'] = this.medicineName;
-    data['generic_name'] = this.genericName;
-    data['instructions'] = this.instructions;
-    data['qty'] = this.qty;
-    data['refills_info'] = this.refillsInfo;
-    data['side_effects'] = this.sideEffects;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['medicine_name'] = medicineName;
+    data['generic_name'] = genericName;
+    data['instructions'] = instructions;
+    data['qty'] = qty;
+    data['refills_info'] = refillsInfo;
+    data['side_effects'] = sideEffects;
     return data;
   }
 

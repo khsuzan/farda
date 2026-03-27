@@ -5,15 +5,9 @@ class AuthenticationRepo {
   Future<Map<String, dynamic>?> sendOtp(String phoneNumber) async {
     try {
       final response = await ApiService.post(
-        endpoint: "send-otp/",
-        body: {"phone": phoneNumber},
+        endpoint: "auth/send-otp",
+        body: {"phoneNumber": phoneNumber},
       );
-
-      if (response != null) {
-        
-      } else {
-        debugPrint("OTP request failed.");
-      }
       return response;
     } catch (e) {
       debugPrint("sendOtp error: $e");
@@ -25,23 +19,16 @@ class AuthenticationRepo {
   Future<Map<String, dynamic>?> verifyOtp(String phoneNumber, String otp) async {
     try {
       final response = await ApiService.post(
-        endpoint: "verify-otp/",
-        body: {"phone": phoneNumber,
-        "otp" : otp
+        endpoint: "auth/verify-otp",
+        body: {
+          "phoneNumber": phoneNumber,
+          "code" : otp
         },
       );
-
-      if (response != null) {
-        
-      } else {
-        debugPrint("OTP request failed.");
-      }
       return response;
     } catch (e) {
-      debugPrint("sendOtp error: $e");
+      debugPrint("verifyOtp error: $e");
       return null;
     }
   }
-  
-
 }

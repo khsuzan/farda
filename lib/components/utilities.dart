@@ -13,6 +13,7 @@ class Country {
     required this.flag,
   });
 }
+
 String getCurrentDate() {
   // Get the current date as a DateTime object
   DateTime now = DateTime.now();
@@ -22,6 +23,7 @@ String getCurrentDate() {
 
   return formattedDate;
 }
+
 final List<Country> _countries = [
   Country(name: 'Afghanistan', code: 'AF', dialCode: '+93', flag: '🇦🇫'),
   Country(name: 'Albania', code: 'AL', dialCode: '+355', flag: '🇦🇱'),
@@ -762,6 +764,7 @@ class PrescriptionView extends StatelessWidget {
   final String quantity;
   final String? notification;
   final String? sideEffects;
+  final VoidCallback? onSetupVial;
 
   const PrescriptionView({
     super.key,
@@ -775,6 +778,7 @@ class PrescriptionView extends StatelessWidget {
     required this.quantity,
     this.notification,
     this.sideEffects,
+    this.onSetupVial,
   });
 
   @override
@@ -874,23 +878,50 @@ class PrescriptionView extends StatelessWidget {
             ),
           ),
           12.verticalSpace,
-          Text(
-            title,
-            style: theme.textTheme.titleLarge?.copyWith(fontSize: 16.sp),
-          ),
-          8.verticalSpace,
-          Text(
-            description,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colors.slate.shade600,
-            ),
-          ),
-          8.verticalSpace,
-          Text(
-            "Qty: $quantity",
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colors.slate.shade600,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                    8.verticalSpace,
+                    Text(
+                      description,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colors.slate.shade600,
+                      ),
+                    ),
+                    8.verticalSpace,
+                    Text(
+                      "Qty: $quantity",
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colors.slate.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (onSetupVial != null)
+                IconButton(
+                  onPressed: onSetupVial,
+                  style: IconButton.styleFrom(
+                    backgroundColor: theme.primaryColor.withOpacity(0.1),
+                  ),
+                  icon: Icon(
+                    Icons.bluetooth_connected,
+                    color: theme.primaryColor,
+                    size: 20.r,
+                  ),
+                  tooltip: 'Setup Vial',
+                ),
+            ],
           ),
           if (notification != null) 8.verticalSpace,
           if (notification != null)
@@ -1506,7 +1537,6 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(6),
                               border: Border.all(
@@ -1556,8 +1586,6 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                           ),
                         );
                       }),
-                    
-                    
                     ],
                   ),
                 ),

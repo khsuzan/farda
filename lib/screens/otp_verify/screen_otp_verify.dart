@@ -2,9 +2,10 @@ import 'package:clipboard/clipboard.dart';
 import 'package:farda/components/_components.dart';
 import 'package:farda/components/custom_snackbar.dart';
 import 'package:farda/routes/routes.dart';
-import 'package:farda/screens/connect_onboard/screen_connect_onboard.dart';
+import 'package:farda/screens/connect_onboard/screen_setup_vial.dart';
 import 'package:farda/screens/login/login_provider.dart';
 
+import 'package:farda/screens/otp_verify/otp_verify_controller.dart';
 import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,18 +47,6 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
     final spacing = theme.extension<Spacing>()!;
     final loginProvider = context.watch<LoginProvider>();
 
-    void onSubmitPin(String pin) async {
-      //TODO: true for bypass
-      bool response = true ?? await loginProvider.verifyOtpApi(pin);
-      if (response == true) {
-        CustomSnackbar.show(context, message: "Otp verified sucessfully.");
-        // context.go(CustomRoutePaths.screenConnectOnBoard);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => ScreenConnectOnboard()),
-        );
-      }
-    }
 
     return ExtendedScaffold(
       resize: true,
@@ -86,7 +75,7 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
                       ),
                     ),
                     TextSpan(
-                      text: '+6281234567890',
+                      text: '${loginProvider.countryCode}${loginProvider.phoneNumber}',
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
@@ -117,7 +106,7 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
                       fieldStyle: FieldStyle.box,
                       controller: otpController,
                       onChanged: (pin) => _otp = pin,
-                      onCompleted: (pin) => onSubmitPin(pin),
+                      onCompleted: (pin) => OtpVerifyController.onSubmitPin(context, pin),
                       otpFieldStyle: OtpFieldStyle(
                         focusBorderColor: colors.baseBlack,
                         enabledBorderColor: colors.slate.shade200,
@@ -161,17 +150,7 @@ class _ScreenOtpVerifyState extends State<ScreenOtpVerify> {
                   Expanded(
                     child: ButtonPrimary(
                       text: "Resend Code",
-                      onClick: () async {
-                        //TODO: true for bypass
-                        bool response =
-                            true ?? await loginProvider.sendOtpApi();
-                        if (response == true) {
-                          CustomSnackbar.show(
-                            context,
-                            message: "Your OTP has been resent to your phone.",
-                          );
-                        }
-                      },
+                      onClick: () => OtpVerifyController.onResendCode(context),
                     ),
                   ),
                   12.horizontalSpace,

@@ -1,8 +1,8 @@
 import 'package:farda/application/authentication/repo/authentication_repo.dart';
 import 'package:farda/components/_components.dart';
 import 'package:farda/components/custom_snackbar.dart';
+import 'package:farda/screens/login/login_controller.dart';
 import 'package:farda/screens/login/login_provider.dart';
-import 'package:farda/screens/otp_verify/screen_otp_verify.dart';
 import 'package:farda/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,35 +47,20 @@ class ScreenLogin extends StatelessWidget {
               6.verticalSpace,
               PhoneNumberInput(
                 onPhoneNumberChanged: (phoneNumber) {
-                  // Handle phone number changes
+                  loginProvider.updatePhoneNumber(phoneNumber);
                 },
                 onCountryChanged: (country) {
-                  // Handle country selection changes
+                  loginProvider.updateCountryCode(country.dialCode);
                 },
                 hintText: 'Mobile number',
               ),
               20.verticalSpace,
               ButtonPrimary(
-                text: "Continue",
-                onClick: () async {
-                  FocusScope.of(context).unfocus();
-
-                  // context.pushRoute(RouteOtpVerify());
-                  //TODO: true for bypass
-                  bool response = true ?? await loginProvider.sendOtpApi();
-                  if (response == true) {
-                    // ignore: use_build_context_synchronously
-                    // context.go("/otp-verify");
-                    CustomSnackbar.show(
-                      context,
-                      message: "Your OTP has been sent to your phone.",
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => ScreenOtpVerify()),
-                    );
-                  }
-                },
+                text: loginProvider.isLoading ? "Loading..." : "Continue",
+                onClick:
+                    loginProvider.isLoading
+                        ? null
+                        : () => LoginController.onContinueClicked(context),
               ),
               16.verticalSpace,
               DividerTextHorizontal(text: "or"),
@@ -83,12 +68,6 @@ class ScreenLogin extends StatelessWidget {
               ButtonSecondary(
                 prefixIcon: SvgPicture.asset("assets/icons/apple.svg"),
                 text: "Continue With Apple",
-                onClick: () {},
-              ),
-              12.verticalSpace,
-              ButtonSecondary(
-                prefixIcon: SvgPicture.asset("assets/icons/facebook.svg"),
-                text: "Continue With Facebook",
                 onClick: () {},
               ),
               12.verticalSpace,

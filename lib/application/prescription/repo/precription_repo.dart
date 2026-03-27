@@ -19,7 +19,7 @@ class PrecriptionRepo {
 
       headers: {"Authorization": "Bearer $token"},
     );
-    print(response);
+    debugPrint(response.toString());
     if (response != null) {
       return PrescriptionModel.fromJson(response);
     } else {
@@ -28,15 +28,16 @@ class PrecriptionRepo {
     }
   }
 
-  Future<int> submitPrescription(PrescriptionModel prescription) async {
+  Future<int?> submitPrescription(PrescriptionModel prescription) async {
     final preferences = await SharedPreferences.getInstance();
     final token = preferences.getString("access") ?? "";
+    final userId = preferences.getString("id") ?? "";
 
-    print(prescription.toSubmit());
+    print(prescription.toSubmit(userId));
 
     final response = await ApiService.postResponse(
       endpoint: AppUrls.submitPrescription,
-      body: prescription.toSubmit(),
+      body: prescription.toSubmit(userId),
       headers: {"Authorization": "Bearer $token"},
     );
 
@@ -46,7 +47,7 @@ class PrecriptionRepo {
       return response.statusCode;
     } else {
       debugPrint(response.toString());
-      return response!.statusCode;
+      return null;
     }
   }
 

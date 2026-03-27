@@ -1,63 +1,115 @@
 import 'package:farda/application/authentication/repo/authentication_repo.dart';
+import 'package:farda/application/authentication/storage/auth_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-// Make sure you import your repo
 
 class LoginProvider extends ChangeNotifier {
+  final AuthenticationRepo _authRepo = AuthenticationRepo();
+
   String access = "";
   String refresh = "";
   String id = "";
 
+  String countryCode = "+880";
+  String phoneNumber = "";
+  bool isLoading = false;
+
+  void updateCountryCode(String newCode) {
+    countryCode = newCode;
+    notifyListeners();
+  }
+
+  void updatePhoneNumber(String newNumber) {
+    phoneNumber = newNumber;
+    notifyListeners();
+  }
+
+  bool _isValidPhoneNumber() {
+    // Regex matches 7 to 15 digits (standard international phone number lengths)
+    final RegExp phoneRegex = RegExp(r'^[0-9]{7,15}$');
+    return phoneRegex.hasMatch(phoneNumber);
+  }
+
   // Send OTP
   Future<bool> sendOtpApi() async {
-    final response = await AuthenticationRepo().sendOtp("+8801726930828");
+    if (!_isValidPhoneNumber()) {
+       return false;
+    }
 
-    if (response != null && response["otp"] != null) {
-      return true;
-    } else {
+    _setLoading(true);
+
+    final fullPhoneNumber = "$countryCode$phoneNumber";
+
+    try {
+      final response = await _authRepo.sendOtp(fullPhoneNumber);
+
+      // We just check if response is not null and preferably has a message
+      if (response != null && response["message"] != null) {
+        return true;
+      }
       return false;
+    } catch (e) {
+      return false;
+    } finally {
+      _setLoading(false);
     }
   }
 
   // Verify OTP and store tokens
   Future<bool> verifyOtpApi(String otp) async {
-    final response = await AuthenticationRepo().verifyOtp("+8801726930828", otp);
+    _setLoading(true);
 
-    if (response != null && response["access"] != null) {
-      access = response["access"];
-      refresh = response["refresh"];
-      id = response["id"].toString();
+    final fullPhoneNumber = "$countryCode$phoneNumber";
 
-      // Save to SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('access', access);
-      await prefs.setString('refresh', refresh);
-      await prefs.setString('id', id);
+    try {
+      final response = await _authRepo.verifyOtp(fullPhoneNumber, otp);
 
-      notifyListeners();
-      return true;
-    } else {
+      if (response != null && response["status"] == true) {
+        if (response["token"] != null) {
+          access = response["token"].toString();
+          await AuthStorage.saveToken(access);
+        }
+        
+        if (response["user"] != null && response["user"]["id"] != null) {
+          id = response["user"]["id"].toString();
+        }
+
+        await AuthStorage.saveSession(
+          access: access,
+          refresh: '', // No refresh token in this response
+          id: id,
+        );
+
+        return true;
+      }
       return false;
+    } catch (e) {
+      return false;
+    } finally {
+      _setLoading(false);
     }
   }
 
-  // Load data from SharedPreferences (e.g., on app startup)
+  // Load data from Storage (e.g., on app startup)
   Future<void> loadFromPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    access = prefs.getString('access') ?? '';
-    refresh = prefs.getString('refresh') ?? '';
-    id = prefs.getString('id') ?? '';
+    final session = await AuthStorage.getSession();
+    access = session['access'] ?? '';
+    refresh = session['refresh'] ?? '';
+    id = session['id'] ?? '';
     notifyListeners();
   }
 
   // Optional: Clear data
   Future<void> clearPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await AuthStorage.clearSession();
+    await AuthStorage.clearToken();
     access = "";
     refresh = "";
     id = "";
+    notifyListeners();
+  }
+
+  void _setLoading(bool value) {
+    isLoading = value;
     notifyListeners();
   }
 }

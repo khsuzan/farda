@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:farda/routes/routes.dart';
 import 'package:farda/screens/dashboard/calendar/calender_provider.dart';
 import 'package:farda/screens/dashboard/home/home_provider.dart';
@@ -41,7 +42,6 @@ class _MyAppState extends State<MyApp> {
               ChangeNotifierProvider(create: (_) => HomeProvider()),
             ],
             child: MaterialApp.router(
-
               theme: AppTheme.theme,
               routerConfig: AppRouter.router,
             ),
@@ -65,6 +65,9 @@ void main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
+
+  const String environment = String.fromEnvironment('ENV', defaultValue: 'development');
+  await dotenv.load(fileName: ".env.$environment");
 
   // await injectDependencies();
 
